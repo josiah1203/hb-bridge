@@ -140,22 +140,6 @@ class SidecarSession:
             },
         )
 
-    def export_document(
-        self,
-        *,
-        document_uri: str,
-        format: str,
-        output_dir: str,
-    ) -> dict[str, Any]:
-        return self.call(
-            "hcp/document/export",
-            {
-                "documentUri": document_uri,
-                "format": format,
-                "outputDir": output_dir,
-            },
-        )
-
     def wait_for_scene_traces(
         self,
         *,

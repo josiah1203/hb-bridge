@@ -1,0 +1,39 @@
+{
+  "version": "0.1",
+  "description": "M1 headless roundtrip corpus for KiCad and FreeCAD adapters",
+  "defaultSidecars": ["kicad", "freecad"],
+  "cases": [
+    {
+      "id": "minimal-kicad-step",
+      "documentUri": "hbp://corpora/kicad/minimal/board.kicad_pcb",
+      "projectId": "corpus-kicad-minimal",
+      "workspaceRoot": "/tmp/hb-bridge-kicad-corpus",
+      "exportFormat": "step",
+      "sidecars": ["kicad"],
+      "mutations": [
+        {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "index": 0}},
+        {"kind": "pcb.track.upsert", "payload": {"net": "GND", "index": 1}}
+      ]
+    },
+    {
+      "id": "minimal-freecad-step",
+      "documentUri": "hbp://corpora/freecad/minimal/bracket.FCStd",
+      "projectId": "corpus-freecad-minimal",
+      "workspaceRoot": "/tmp/hb-bridge-freecad-corpus",
+      "exportFormat": "step",
+      "sidecars": ["freecad"],
+      "mutations": [
+        {
+          "kind": "mechanical/solid/upsert",
+          "payload": {
+            "commitId": "corpus-freecad-commit",
+            "solid_id": "solid-bracket-1",
+            "name": "Mounting Bracket",
+            "material": "Aluminum",
+            "volume_mm3": 128.5
+          }
+        }
+      ]
+    }
+  ]
+}

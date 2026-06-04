@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "id": "freecad-minimal-solid",
+      "document_uri": "hbp://corpora/freecad/minimal/bracket.FCStd",
+      "sidecars": ["freecad"],
+      "mutations": [
+        {
+          "kind": "mechanical/solid/upsert",
+          "payload": {
+            "commitId": "corpus-freecad-commit",
+            "solid_id": "solid-bracket-1",
+            "name": "Mounting Bracket",
+            "material": "Aluminum",
+            "volume_mm3": 128.5
+          }
+        }
+      ]
+    }
+  ]
+}

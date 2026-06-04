@@ -2,7 +2,7 @@
   "cases": [
     {
       "id": "minimal-kicad-step",
-      "documentUri": "hcp://regression/minimal/board",
+      "documentUri": "hbp://corpus/kicad/minimal/board",
       "projectId": "regression-minimal",
       "workspaceRoot": "/tmp/hcp-regression-minimal",
       "exportFormat": "step",
@@ -14,7 +14,7 @@
     },
     {
       "id": "minimal-freecad-step",
-      "documentUri": "hcp://regression/minimal/board",
+      "documentUri": "hbp://corpus/freecad/minimal/bracket",
       "projectId": "regression-minimal",
       "workspaceRoot": "/tmp/hcp-regression-minimal",
       "exportFormat": "step",

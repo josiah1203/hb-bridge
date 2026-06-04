@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "kicad-minimal-layout",
+      "document_uri": "hbp://corpora/kicad/minimal/board.kicad_pcb",
+      "sidecars": ["kicad"],
+      "mutations": [
+        {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "index": 0}},
+        {"kind": "pcb.track.upsert", "payload": {"net": "GND", "index": 1}}
+      ]
+    }
+  ]
+}

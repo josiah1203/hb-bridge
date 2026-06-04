@@ -1,0 +1,22 @@
+[package]
+name = "freecad-sidecar"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "freecad_sidecar"
+path = "src/lib.rs"
+
+[[bin]]
+name = "freecad-sidecar"
+path = "src/main.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+sidecar-protocol.workspace = true
+sidecar-runner = { path = "../sidecar-runner" }
+hnf-core.workspace = true
+hnf-freecad.workspace = true

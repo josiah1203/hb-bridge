@@ -1,0 +1,22 @@
+[package]
+name = "kicad-sidecar"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "kicad_sidecar"
+path = "src/lib.rs"
+
+[[bin]]
+name = "kicad-sidecar"
+path = "src/main.rs"
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+sidecar-protocol.workspace = true
+sidecar-runner = { path = "../sidecar-runner" }
+hnf-core.workspace = true
+hnf-kicad.workspace = true

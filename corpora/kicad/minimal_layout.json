@@ -1,0 +1,12 @@
+{
+  "id": "kicad-minimal-layout",
+  "description": "Minimal KiCad layout roundtrip seed (headless stub binding)",
+  "documentUri": "hbp://corpora/kicad/minimal/board.kicad_pcb",
+  "projectId": "corpus-kicad-minimal",
+  "workspaceRoot": "/tmp/hb-bridge-kicad-corpus",
+  "exportFormat": "step",
+  "mutations": [
+    {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "index": 0}},
+    {"kind": "pcb.track.upsert", "payload": {"net": "GND", "index": 1}}
+  ]
+}

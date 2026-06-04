@@ -1,4 +1,8 @@
-"""Roundtrip regression: mutations → export → re-export fingerprint stability."""
+"""Roundtrip regression: mutations → export → re-export fingerprint stability.
+
+Headless mapping-only gate: ``cargo test -p roundtrip-harness`` (no sidecar binaries).
+This module drives stdio sidecars built from ``rust/crates/*-sidecar``.
+"""
 
 from __future__ import annotations
 

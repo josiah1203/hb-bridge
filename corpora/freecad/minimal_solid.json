@@ -1,0 +1,20 @@
+{
+  "id": "freecad-minimal-solid",
+  "description": "Minimal FreeCAD mechanical solid roundtrip seed (headless stub binding)",
+  "documentUri": "hbp://corpora/freecad/minimal/bracket.FCStd",
+  "projectId": "corpus-freecad-minimal",
+  "workspaceRoot": "/tmp/hb-bridge-freecad-corpus",
+  "exportFormat": "step",
+  "mutations": [
+    {
+      "kind": "mechanical/solid/upsert",
+      "payload": {
+        "commitId": "corpus-freecad-commit",
+        "solid_id": "solid-bracket-1",
+        "name": "Mounting Bracket",
+        "material": "Aluminum",
+        "volume_mm3": 128.5
+      }
+    }
+  ]
+}

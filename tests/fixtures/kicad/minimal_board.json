@@ -1,0 +1,18 @@
+{
+  "id": "minimal-schematic-layout",
+  "documentUri": "hbp://corpus/kicad/minimal/board",
+  "projectId": "hb-corpus-kicad",
+  "workspaceRoot": "/tmp/hb-corpus-kicad",
+  "exportFormat": "step",
+  "sidecars": ["kicad"],
+  "mutations": [
+    {
+      "kind": "schematic.symbol.upsert",
+      "payload": { "ref": "R1", "value": "10k", "index": 0 }
+    },
+    {
+      "kind": "pcb.track.upsert",
+      "payload": { "net": "GND", "layer": "F.Cu", "index": 1 }
+    }
+  ]
+}

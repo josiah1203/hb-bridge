@@ -1,0 +1,20 @@
+{
+  "id": "minimal-bracket",
+  "documentUri": "hbp://corpus/freecad/minimal/bracket",
+  "projectId": "hb-corpus-freecad",
+  "workspaceRoot": "/tmp/hb-corpus-freecad",
+  "exportFormat": "step",
+  "sidecars": ["freecad"],
+  "mutations": [
+    {
+      "kind": "mechanical/solid/upsert",
+      "payload": {
+        "commitId": "corpus-commit-1",
+        "solid_id": "solid-bracket-1",
+        "name": "Bracket",
+        "material": "Aluminum",
+        "volume_mm3": 42.0
+      }
+    }
+  ]
+}

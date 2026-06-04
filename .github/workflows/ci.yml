@@ -7,9 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Checkout hnf (path dep)
+      - name: Checkout hnf (path dependency)
         run: |
-          git clone --depth 1 file://${{ github.workspace }}/../hnf /tmp/hnf 2>/dev/null || true
-      - run: cargo test --all
-        continue-on-error: true
+          if [ -d ../hnf/.git ]; then
+            echo "hnf sibling present"
+          else
+            git clone --depth 1 https://github.com/hummingbird-labs/hnf.git /tmp/hnf || \
+              git clone --depth 1 file://${{ github.workspace }}/../hnf /tmp/hnf 2>/dev/null || true
+            ln -sf /tmp/hnf ../hnf 2>/dev/null || ln -sf /tmp/hnf ${{ github.workspace }}/../hnf
+          fi
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Adapter crate tests
+        run: cargo test --all
+      - name: Headless sidecar harness tests
+        run: |
+          cd rust
+          cargo test --all
+          cargo build -q -p kicad-sidecar -p freecad-sidecar
+      - name: Regression unit + headless roundtrip
+        run: python3 -m pytest scripts/regression/tests/ -q
