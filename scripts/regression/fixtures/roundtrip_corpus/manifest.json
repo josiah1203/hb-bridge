@@ -1,0 +1,36 @@
+{
+  "cases": [
+    {
+      "id": "minimal-kicad-step",
+      "documentUri": "hcp://regression/minimal/board",
+      "projectId": "regression-minimal",
+      "workspaceRoot": "/tmp/hcp-regression-minimal",
+      "exportFormat": "step",
+      "sidecars": ["kicad"],
+      "mutations": [
+        {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "index": 0}},
+        {"kind": "pcb.track.upsert", "payload": {"net": "GND", "index": 1}}
+      ]
+    },
+    {
+      "id": "minimal-freecad-step",
+      "documentUri": "hcp://regression/minimal/board",
+      "projectId": "regression-minimal",
+      "workspaceRoot": "/tmp/hcp-regression-minimal",
+      "exportFormat": "step",
+      "sidecars": ["freecad"],
+      "mutations": [
+        {
+          "kind": "mechanical/solid/upsert",
+          "payload": {
+            "commitId": "regression-commit",
+            "solid_id": "solid-1",
+            "name": "Bracket",
+            "material": "Aluminum",
+            "volume_mm3": 42.0
+          }
+        }
+      ]
+    }
+  ]
+}

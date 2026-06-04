@@ -1,0 +1,10 @@
+{
+  "cases": [
+    {
+      "id": "ngspice-stub-stable",
+      "engine": "ngspice",
+      "jobId": "regression-stub-1",
+      "outputDir": "/tmp/hcp-sim-regression"
+    }
+  ]
+}

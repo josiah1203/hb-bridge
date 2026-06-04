@@ -1,0 +1,7 @@
+{
+  "engine": "ngspice",
+  "job_id": "regression-stub-1",
+  "solver_input": {
+    "netlist": "fixtures/stub.cir"
+  }
+}

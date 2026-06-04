@@ -1,0 +1,30 @@
+[workspace]
+members = [
+  "crates/protocol",
+  "crates/hnf-kicad",
+  "crates/hnf-freecad",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "Apache-2.0"
+version = "0.1.0"
+authors = ["HummingBird Labs"]
+repository = "https://github.com/hummingbird-labs/hb-bridge"
+homepage = "https://github.com/hummingbird-labs/hb-bridge"
+documentation = "https://github.com/hummingbird-labs/hb-bridge"
+readme = "README.md"
+keywords = ["hnf", "bridge", "hardware", "eda"]
+categories = ["development-tools", "science"]
+rust-version = "1.70"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+hnf-core = { path = "../hnf/crates/hnf-core" }
+sidecar-protocol = { path = "crates/protocol" }
+
+[profile.dev]
+incremental = true

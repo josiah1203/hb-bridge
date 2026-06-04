@@ -1,0 +1,16 @@
+{
+  "violations": [
+    {
+      "rule": "pcb.track.width",
+      "severity": "warning",
+      "location": "pcb/track/0",
+      "message": "track width below recommended minimum"
+    },
+    {
+      "rule": "pcb.via.diameter",
+      "severity": "error",
+      "location": "pcb/via/3",
+      "message": "via diameter below process minimum"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "documentUri": "hcp://regression/minimal/board",
+  "projectId": "regression-minimal",
+  "workspaceRoot": "/tmp/hcp-regression-minimal",
+  "sidecars": ["kicad", "freecad"]
+}

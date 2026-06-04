@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "id": "ngspice-stub-stable",
+      "engine": "ngspice",
+      "job_id": "regression-stub-1",
+      "status": "succeeded",
+      "exit_code": 0,
+      "stdout": "stub-run ngspice regression-stub-1",
+      "artifacts": [
+        {
+          "path": "ngspice-regression-stub-1.json",
+          "content_type": "application/json",
+          "role": "result-manifest"
+        }
+      ]
+    }
+  ]
+}
