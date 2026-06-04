@@ -11,17 +11,17 @@ use serde_json::Value;
 use sidecar_protocol::Mutation;
 
 #[derive(Debug, Deserialize)]
-struct CorpusManifest {
-    cases: Vec<CorpusCase>,
+pub struct CorpusManifest {
+    pub cases: Vec<CorpusCase>,
 }
 
 #[derive(Debug, Deserialize)]
-struct CorpusCase {
-    id: String,
-    document_uri: String,
+pub struct CorpusCase {
+    pub id: String,
+    pub document_uri: String,
     #[serde(default)]
-    sidecars: Vec<String>,
-    mutations: Vec<CorpusMutation>,
+    pub sidecars: Vec<String>,
+    pub mutations: Vec<CorpusMutation>,
 }
 
 #[derive(Debug, Deserialize)]

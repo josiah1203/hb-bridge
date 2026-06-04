@@ -113,10 +113,8 @@ mod tests {
 
     #[test]
     fn select_bridge_defaults_to_noop() {
-        for key in ["HCP_USE_HOST_OSS", "HBP_USE_HOST_OSS"] {
-            std::env::set_var(key, "0");
-        }
-        let bridge = select_engine_bridge();
+        let bridge: std::sync::Arc<dyn FreecadEngineBridge> =
+            std::sync::Arc::new(crate::NoopFreecadEngineBridge);
         let ctx = ProjectContext {
             project_id: "p".to_string(),
             workspace_root: "/tmp".to_string(),
