@@ -1,0 +1,7 @@
+{
+  "tool": "xschem",
+  "document_uri": "hbp://fixtures/xschem/minimal_amp.sch",
+  "mutations": [
+    {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "value": "10k"}}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "xschem-minimal-amp",
+      "document_uri": "hbp://corpora/xschem/minimal/amp.sch",
+      "sidecars": ["xschem"],
+      "mutations": [
+        {"kind": "schematic.symbol.upsert", "payload": {"ref": "R1", "value": "10k"}},
+        {"kind": "schematic.wire.upsert", "payload": {"net": "n1", "from": "R1.1", "to": "C1.1"}}
+      ]
+    }
+  ]
+}

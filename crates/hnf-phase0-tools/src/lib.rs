@@ -11,6 +11,11 @@ pub const PHASE0_TOOLS: &[&str] = &[
     "verilator",
     "magic",
     "openroad",
+    "xschem",
+    "openems",
+    "elmer",
+    "qucs-s",
+    "platformio",
 ];
 
 pub fn node_type_prefix(tool: &str) -> &'static str {
@@ -21,6 +26,11 @@ pub fn node_type_prefix(tool: &str) -> &'static str {
         "verilator" => "verilator.tb",
         "magic" => "magic.layout",
         "openroad" => "openroad.pnr",
+        "xschem" => "xschem.schematic",
+        "openems" => "openems.sim",
+        "elmer" => "elmer.sim",
+        "qucs-s" => "qucs.circuit",
+        "platformio" => "platformio.firmware",
         _ => "phase0.mutation",
     }
 }
@@ -122,5 +132,38 @@ mod tests {
         };
         let deltas = map_mutation_to_scene_delta("ngspice", "hbp://doc/rc.cir", 1, &mutation);
         assert_eq!(deltas.nodes[0].nodeType, "ngspice.circuit");
+    }
+
+    #[test]
+    fn xschem_stub_mapping_uses_schematic_node_type() {
+        let mutation = Mutation {
+            kind: "schematic.symbol.upsert".to_string(),
+            payload: json!({"ref": "R1"}),
+        };
+        let deltas = map_mutation_to_scene_delta("xschem", "hbp://doc/top.sch", 0, &mutation);
+        assert_eq!(deltas.nodes[0].nodeType, "xschem.schematic");
+    }
+
+    #[test]
+    fn openems_stub_mapping_is_stable() {
+        let mutation = Mutation {
+            kind: "sim.fdtd.mesh.upsert".to_string(),
+            payload: json!({"cells": 32}),
+        };
+        let a = map_mutation_to_scene_delta("openems", "hbp://doc/antenna.xml", 0, &mutation);
+        let b = map_mutation_to_scene_delta("openems", "hbp://doc/antenna.xml", 0, &mutation);
+        assert_eq!(fingerprint_deltas(&a), fingerprint_deltas(&b));
+        assert_eq!(a.nodes[0].nodeType, "openems.sim");
+    }
+
+    #[test]
+    fn platformio_stub_mapping_uses_firmware_node_type() {
+        let mutation = Mutation {
+            kind: "firmware.env.upsert".to_string(),
+            payload: json!({"board": "esp32dev"}),
+        };
+        let deltas =
+            map_mutation_to_scene_delta("platformio", "hbp://doc/platformio.ini", 0, &mutation);
+        assert_eq!(deltas.nodes[0].nodeType, "platformio.firmware");
     }
 }

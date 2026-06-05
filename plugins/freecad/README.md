@@ -13,7 +13,7 @@ HB Bridge is a **FreeCAD workbench / macro** contributed upstream to FreeCAD. No
 | CLI bridge | `crates/hb-bridge-hnf` | landed |
 | Headless CI | `crates/roundtrip-harness` + `rust/crates/freecad-sidecar` | landed |
 | In-tool workbench | `hb_bridge.py` + `hnf_client.py` | v0.1 macro API landed |
-| Bridge panel | optional commit to HOS | M2 |
+| Bridge panel | `panel/bridge_panel.py` stub (HBW link + last export) | M2 stub |
 
 ## Install path (FreeCAD 1.x)
 

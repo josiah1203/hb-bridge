@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "elmer-minimal-heat",
+      "document_uri": "hbp://corpora/elmer/minimal/heat.sif",
+      "sidecars": ["elmer"],
+      "mutations": [
+        {"kind": "sim.fem.mesh.upsert", "payload": {"elements": 128, "dim": 2}},
+        {"kind": "sim.fem.boundary.upsert", "payload": {"name": "fixed", "bc": "dirichlet"}}
+      ]
+    }
+  ]
+}

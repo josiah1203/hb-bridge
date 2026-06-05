@@ -1,0 +1,7 @@
+{
+  "tool": "qucs-s",
+  "document_uri": "hbp://fixtures/qucs-s/rc_filter.sch",
+  "mutations": [
+    {"kind": "sim.schematic.upsert", "payload": {"name": "rc-filter"}}
+  ]
+}

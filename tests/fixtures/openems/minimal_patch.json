@@ -1,0 +1,7 @@
+{
+  "tool": "openems",
+  "document_uri": "hbp://fixtures/openems/minimal_patch.xml",
+  "mutations": [
+    {"kind": "sim.fdtd.mesh.upsert", "payload": {"cells": 16}}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "qucs-s-rc-filter",
+      "document_uri": "hbp://corpora/qucs-s/minimal/rc_filter.sch",
+      "sidecars": ["qucs-s"],
+      "mutations": [
+        {"kind": "sim.schematic.upsert", "payload": {"name": "rc-filter", "title": "RC lowpass"}},
+        {"kind": "sim.component.upsert", "payload": {"ref": "C1", "type": "capacitor", "value": "100n"}}
+      ]
+    }
+  ]
+}

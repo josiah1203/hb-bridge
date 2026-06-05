@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "openems-minimal-patch",
+      "document_uri": "hbp://corpora/openems/minimal/patch_antenna.xml",
+      "sidecars": ["openems"],
+      "mutations": [
+        {"kind": "sim.fdtd.mesh.upsert", "payload": {"cells": 32, "unit": "mm"}},
+        {"kind": "sim.fdtd.material.upsert", "payload": {"name": "substrate", "epsilon_r": 4.4}}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "tool": "elmer",
+  "document_uri": "hbp://fixtures/elmer/minimal_heat.sif",
+  "mutations": [
+    {"kind": "sim.fem.mesh.upsert", "payload": {"elements": 64}}
+  ]
+}

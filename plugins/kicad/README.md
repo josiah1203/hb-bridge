@@ -13,7 +13,7 @@ HB Bridge ships as a **KiCad action plugin / Python module** contributed upstrea
 | CLI bridge | `crates/hb-bridge-hnf` (`hb-bridge-hnf`) | landed |
 | Headless CI | `crates/roundtrip-harness` + `rust/crates/kicad-sidecar` | landed |
 | In-tool plugin | `plugin_stub.py` + `hnf_client.py` | v0.1 landed (layout); schematic API headless |
-| Bridge panel | optional file → HOS commit | M2 |
+| Bridge panel | `panel/bridge_panel.py` stub (HBW link + last export) | M2 stub |
 
 ## Install path (KiCad 8)
 

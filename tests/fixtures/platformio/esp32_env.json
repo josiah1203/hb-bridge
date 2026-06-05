@@ -1,0 +1,7 @@
+{
+  "tool": "platformio",
+  "document_uri": "hbp://fixtures/platformio/esp32/platformio.ini",
+  "mutations": [
+    {"kind": "firmware.env.upsert", "payload": {"board": "esp32dev"}}
+  ]
+}

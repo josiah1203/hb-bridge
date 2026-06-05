@@ -36,7 +36,19 @@ pub struct CorpusMutation {
 
 pub const M1_TOOLS: &[&str] = &["kicad", "freecad"];
 pub const ALL_CORPUS_TOOLS: &[&str] = &[
-    "kicad", "freecad", "klayout", "ngspice", "yosys", "verilator", "magic", "openroad",
+    "kicad",
+    "freecad",
+    "klayout",
+    "ngspice",
+    "yosys",
+    "verilator",
+    "magic",
+    "openroad",
+    "xschem",
+    "openems",
+    "elmer",
+    "qucs-s",
+    "platformio",
 ];
 
 pub fn repo_root() -> PathBuf {
@@ -230,6 +242,11 @@ pub fn host_program_for_tool(tool: &str) -> Option<&'static str> {
         "verilator" => Some("verilator"),
         "magic" => Some("magic"),
         "openroad" => Some("openroad"),
+        "xschem" => Some("xschem"),
+        "openems" => Some("openems"),
+        "elmer" => Some("ElmerSolver"),
+        "qucs-s" => Some("qucs"),
+        "platformio" => Some("pio"),
         _ => None,
     }
 }
@@ -303,6 +320,31 @@ mod tests {
     }
 
     #[test]
+    fn xschem_corpus_roundtrip_is_deterministic() {
+        run_corpus("xschem").expect("xschem corpus");
+    }
+
+    #[test]
+    fn openems_corpus_roundtrip_is_deterministic() {
+        run_corpus("openems").expect("openems corpus");
+    }
+
+    #[test]
+    fn elmer_corpus_roundtrip_is_deterministic() {
+        run_corpus("elmer").expect("elmer corpus");
+    }
+
+    #[test]
+    fn qucs_s_corpus_roundtrip_is_deterministic() {
+        run_corpus("qucs-s").expect("qucs-s corpus");
+    }
+
+    #[test]
+    fn platformio_corpus_roundtrip_is_deterministic() {
+        run_corpus("platformio").expect("platformio corpus");
+    }
+
+    #[test]
     fn corpus_manifest_files_exist() {
         for tool in ALL_CORPUS_TOOLS {
             let path = corpus_manifest_path(tool);
@@ -311,11 +353,16 @@ mod tests {
     }
 
     #[test]
-    fn fixture_json_exists_for_yosys_and_ngspice() {
+    fn fixture_json_exists_for_phase0_tools() {
         let root = repo_root();
         for rel in [
             "tests/fixtures/yosys/minimal_counter.json",
             "tests/fixtures/ngspice/rc_lowpass.json",
+            "tests/fixtures/xschem/minimal_amp.json",
+            "tests/fixtures/openems/minimal_patch.json",
+            "tests/fixtures/elmer/minimal_heat.json",
+            "tests/fixtures/qucs-s/rc_filter.json",
+            "tests/fixtures/platformio/esp32_env.json",
         ] {
             let path = root.join(rel);
             assert!(path.is_file(), "missing fixture {}", path.display());
@@ -356,6 +403,36 @@ mod tests {
     #[ignore = "requires OpenROAD on PATH; run with HB_BRIDGE_HOST_OPENROAD=1 and --ignored"]
     fn openroad_host_binary_smoke() {
         run_host_smoke_if_gated("openroad").expect("openroad host");
+    }
+
+    #[test]
+    #[ignore = "requires xschem on PATH; run with HB_BRIDGE_HOST_XSCHEM=1 and --ignored"]
+    fn xschem_host_binary_smoke() {
+        run_host_smoke_if_gated("xschem").expect("xschem host");
+    }
+
+    #[test]
+    #[ignore = "requires OpenEMS on PATH; run with HB_BRIDGE_HOST_OPENEMS=1 and --ignored"]
+    fn openems_host_binary_smoke() {
+        run_host_smoke_if_gated("openems").expect("openems host");
+    }
+
+    #[test]
+    #[ignore = "requires ElmerSolver on PATH; run with HB_BRIDGE_HOST_ELMER=1 and --ignored"]
+    fn elmer_host_binary_smoke() {
+        run_host_smoke_if_gated("elmer").expect("elmer host");
+    }
+
+    #[test]
+    #[ignore = "requires qucs on PATH; run with HB_BRIDGE_HOST_QUCS_S=1 and --ignored"]
+    fn qucs_s_host_binary_smoke() {
+        run_host_smoke_if_gated("qucs-s").expect("qucs-s host");
+    }
+
+    #[test]
+    #[ignore = "requires pio on PATH; run with HB_BRIDGE_HOST_PLATFORMIO=1 and --ignored"]
+    fn platformio_host_binary_smoke() {
+        run_host_smoke_if_gated("platformio").expect("platformio host");
     }
 
     #[test]

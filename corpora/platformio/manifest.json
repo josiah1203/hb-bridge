@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "platformio-esp32-env",
+      "document_uri": "hbp://corpora/platformio/minimal/esp32/platformio.ini",
+      "sidecars": ["platformio"],
+      "mutations": [
+        {"kind": "firmware.env.upsert", "payload": {"name": "esp32dev", "platform": "espressif32", "board": "esp32dev"}},
+        {"kind": "firmware.target.upsert", "payload": {"framework": "arduino", "monitor_speed": 115200}}
+      ]
+    }
+  ]
+}
