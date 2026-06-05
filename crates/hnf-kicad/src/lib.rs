@@ -1,5 +1,15 @@
 //! KiCad mutation → scene-graph mapping for HCP sidecars.
 
+mod hnf_io;
+
+pub use hnf_io::{
+    build_layout_hnf_document, build_schematic_hnf_document, export_hnf_json, extract_layout_domain,
+    extract_schematic_domain, import_hnf_json, layout_domain_to_mutations, layout_roundtrip_fingerprint,
+    layout_snapshot_from_domain, mutations_to_layout_domain, mutations_to_schematic_domain,
+    roundtrip_layout, roundtrip_schematic, schematic_domain_to_mutations, schematic_snapshot_from_domain,
+    split_mutations, KicadHnfError, LayoutSnapshot, SchematicSnapshot,
+};
+
 use hnf_core::SceneGraphDeltas;
 use serde_json::{json, Value};
 use sidecar_protocol::{Mutation, SceneGraphEdge, SceneGraphNode};

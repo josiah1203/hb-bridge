@@ -1,21 +1,21 @@
 [package]
-name = "hnf-kicad"
-description = "KiCad HNF → scene-graph mapping (hcp-adapters/hnf-kicad)"
+name = "hb-bridge-hnf"
+description = "CLI for KiCad/FreeCAD HNF v0.1 save/load (invoked by in-tool plugins)"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
-homepage.workspace = true
-documentation.workspace = true
-readme = "README.md"
-keywords.workspace = true
-categories.workspace = true
 repository.workspace = true
 rust-version.workspace = true
 
+[[bin]]
+name = "hb-bridge-hnf"
+path = "src/main.rs"
+
 [dependencies]
 hnf-core.workspace = true
+hnf-kicad.workspace = true
+hnf-freecad.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sidecar-protocol.workspace = true
-thiserror.workspace = true

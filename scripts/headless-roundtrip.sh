@@ -5,7 +5,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 echo "==> roundtrip-harness (corpus)"
 cargo test -p roundtrip-harness -q
-echo "==> adapter crates"
+echo "==> adapter crates + HNF CLI"
+cargo build -p hb-bridge-hnf -q
 cargo test -p hnf-kicad -p hnf-freecad -p hnf-phase0-tools -q
 echo "==> sidecar libraries"
 (cd rust && cargo test -p kicad-sidecar -p freecad-sidecar -q)

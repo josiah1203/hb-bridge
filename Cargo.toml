@@ -1,5 +1,6 @@
 [workspace]
 members = [
+  "crates/hb-bridge-hnf",
   "crates/hnf-kicad",
   "crates/hnf-freecad",
   "crates/hnf-phase0-tools",

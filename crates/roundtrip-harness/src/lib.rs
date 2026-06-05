@@ -4,8 +4,8 @@ use std::fs;
 use std::path::PathBuf;
 
 use hnf_core::{HnfMutation, SceneGraphDeltas};
-use hnf_freecad::map_mutation_to_deltas;
-use hnf_kicad::map_mutation_to_scene_delta;
+use hnf_freecad::{map_mutation_to_deltas, roundtrip_mechanical};
+use hnf_kicad::{map_mutation_to_scene_delta, roundtrip_layout, roundtrip_schematic, split_mutations};
 use hnf_phase0_tools::{
     fingerprint_deltas as phase0_fingerprint, host_binary_available, host_tool_gate_enabled,
     map_mutation_to_scene_delta as map_phase0_mutation, PHASE0_TOOLS,
@@ -77,6 +77,38 @@ fn fingerprint_freecad_deltas(deltas: &SceneGraphDeltas) -> String {
     )
 }
 
+pub fn run_kicad_hnf_document_roundtrip(case: &CorpusCase) -> Result<(), String> {
+    let mutations: Vec<Mutation> = case
+        .mutations
+        .iter()
+        .map(|m| Mutation {
+            kind: m.kind.clone(),
+            payload: m.payload.clone(),
+        })
+        .collect();
+    let (layout, schematic) = split_mutations(&mutations);
+    let project = case.document_uri.clone();
+    if !layout.is_empty() {
+        roundtrip_layout(&project, &layout).map_err(|e| e.to_string())?;
+    }
+    if !schematic.is_empty() {
+        roundtrip_schematic(&project, &schematic).map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+pub fn run_freecad_hnf_document_roundtrip(case: &CorpusCase) -> Result<(), String> {
+    let mutations: Vec<HnfMutation> = case
+        .mutations
+        .iter()
+        .map(|m| HnfMutation {
+            kind: m.kind.clone(),
+            payload: m.payload.clone(),
+        })
+        .collect();
+    roundtrip_mechanical(&case.document_uri, &mutations).map_err(|e| e.to_string())
+}
+
 pub fn run_kicad_case(case: &CorpusCase) -> Result<(), String> {
     let mut fingerprints: Vec<String> = Vec::new();
     for (index, mutation) in case.mutations.iter().enumerate() {
@@ -102,6 +134,7 @@ pub fn run_kicad_case(case: &CorpusCase) -> Result<(), String> {
             case.id
         ));
     }
+    run_kicad_hnf_document_roundtrip(case)?;
     Ok(())
 }
 
@@ -130,6 +163,7 @@ pub fn run_freecad_case(case: &CorpusCase) -> Result<(), String> {
             case.id
         ));
     }
+    run_freecad_hnf_document_roundtrip(case)?;
     Ok(())
 }
 
@@ -188,6 +222,8 @@ pub fn corpus_manifest_path(tool: &str) -> PathBuf {
 /// Host program names for optional smoke tests (`#[ignore]` unless env gate set).
 pub fn host_program_for_tool(tool: &str) -> Option<&'static str> {
     match tool {
+        "kicad" => Some("kicad-cli"),
+        "freecad" => Some("freecadcmd"),
         "klayout" => Some("klayout"),
         "ngspice" => Some("ngspice"),
         "yosys" => Some("yosys"),
@@ -205,6 +241,19 @@ pub fn run_host_smoke_if_gated(tool: &str) -> Result<(), String> {
     let program = host_program_for_tool(tool).ok_or_else(|| format!("no host binary for {tool}"))?;
     if !host_binary_available(program) {
         return Err(format!("host binary not on PATH: {program}"));
+    }
+    Ok(())
+}
+
+pub fn run_m1_host_hnf_roundtrip(tool: &str) -> Result<(), String> {
+    run_host_smoke_if_gated(tool)?;
+    let manifest = load_corpus(tool);
+    for case in &manifest.cases {
+        match tool {
+            "kicad" => run_kicad_hnf_document_roundtrip(case)?,
+            "freecad" => run_freecad_hnf_document_roundtrip(case)?,
+            _ => return Err(format!("unsupported M1 host tool: {tool}")),
+        }
     }
     Ok(())
 }
@@ -307,5 +356,33 @@ mod tests {
     #[ignore = "requires OpenROAD on PATH; run with HB_BRIDGE_HOST_OPENROAD=1 and --ignored"]
     fn openroad_host_binary_smoke() {
         run_host_smoke_if_gated("openroad").expect("openroad host");
+    }
+
+    #[test]
+    fn kicad_hnf_document_roundtrip_from_corpus() {
+        let manifest = load_corpus("kicad");
+        for case in &manifest.cases {
+            run_kicad_hnf_document_roundtrip(case).expect("kicad HNF document roundtrip");
+        }
+    }
+
+    #[test]
+    fn freecad_hnf_document_roundtrip_from_corpus() {
+        let manifest = load_corpus("freecad");
+        for case in &manifest.cases {
+            run_freecad_hnf_document_roundtrip(case).expect("freecad HNF document roundtrip");
+        }
+    }
+
+    #[test]
+    #[ignore = "requires kicad-cli on PATH; run with HB_BRIDGE_HOST_KICAD=1 and --ignored"]
+    fn kicad_host_hnf_roundtrip() {
+        run_m1_host_hnf_roundtrip("kicad").expect("kicad host HNF roundtrip");
+    }
+
+    #[test]
+    #[ignore = "requires freecadcmd on PATH; run with HB_BRIDGE_HOST_FREECAD=1 and --ignored"]
+    fn freecad_host_hnf_roundtrip() {
+        run_m1_host_hnf_roundtrip("freecad").expect("freecad host HNF roundtrip");
     }
 }

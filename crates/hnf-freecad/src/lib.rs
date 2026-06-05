@@ -1,5 +1,13 @@
 //! FreeCAD mechanical mutation → scene-graph mapping.
 
+mod hnf_io;
+
+pub use hnf_io::{
+    build_mechanical_hnf_document, export_hnf_json, extract_mechanical_domain, import_hnf_json,
+    mechanical_domain_to_mutations, mechanical_roundtrip_fingerprint, mechanical_snapshot_from_domain,
+    mutations_to_mechanical_domain, roundtrip_mechanical, FreecadHnfError, MechanicalSnapshot,
+};
+
 use hnf_core::{HnfMutation, SceneGraphDeltas};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};

@@ -3,6 +3,18 @@
 version = 3
 
 [[package]]
+name = "hb-bridge-hnf"
+version = "0.1.0"
+dependencies = [
+ "hnf-core",
+ "hnf-freecad",
+ "hnf-kicad",
+ "serde",
+ "serde_json",
+ "sidecar-protocol",
+]
+
+[[package]]
 name = "hnf-core"
 version = "0.1.0"
 dependencies = [
@@ -30,6 +42,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sidecar-protocol",
+ "thiserror",
 ]
 
 [[package]]
