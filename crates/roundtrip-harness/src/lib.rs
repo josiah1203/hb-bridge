@@ -6,6 +6,10 @@ use std::path::PathBuf;
 use hnf_core::{HnfMutation, SceneGraphDeltas};
 use hnf_freecad::map_mutation_to_deltas;
 use hnf_kicad::map_mutation_to_scene_delta;
+use hnf_phase0_tools::{
+    fingerprint_deltas as phase0_fingerprint, host_binary_available, host_tool_gate_enabled,
+    map_mutation_to_scene_delta as map_phase0_mutation, PHASE0_TOOLS,
+};
 use serde::Deserialize;
 use serde_json::Value;
 use sidecar_protocol::Mutation;
@@ -25,10 +29,15 @@ pub struct CorpusCase {
 }
 
 #[derive(Debug, Deserialize)]
-struct CorpusMutation {
+pub struct CorpusMutation {
     kind: String,
     payload: Value,
 }
+
+pub const M1_TOOLS: &[&str] = &["kicad", "freecad"];
+pub const ALL_CORPUS_TOOLS: &[&str] = &[
+    "kicad", "freecad", "klayout", "ngspice", "yosys", "verilator", "magic", "openroad",
+];
 
 pub fn repo_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -78,7 +87,6 @@ pub fn run_kicad_case(case: &CorpusCase) -> Result<(), String> {
         let deltas = map_mutation_to_scene_delta(&case.document_uri, index, &m);
         fingerprints.push(fingerprint_kicad_deltas(&deltas));
     }
-    // Re-apply same mutations; mapping must be deterministic.
     let mut replay: Vec<String> = Vec::new();
     for (index, mutation) in case.mutations.iter().enumerate() {
         let m = Mutation {
@@ -125,12 +133,44 @@ pub fn run_freecad_case(case: &CorpusCase) -> Result<(), String> {
     Ok(())
 }
 
+pub fn run_phase0_tool_case(tool: &str, case: &CorpusCase) -> Result<(), String> {
+    if !PHASE0_TOOLS.contains(&tool) {
+        return Err(format!("not a Phase 0 stub tool: {tool}"));
+    }
+    let mut fingerprints: Vec<String> = Vec::new();
+    for (index, mutation) in case.mutations.iter().enumerate() {
+        let m = Mutation {
+            kind: mutation.kind.clone(),
+            payload: mutation.payload.clone(),
+        };
+        let deltas = map_phase0_mutation(tool, &case.document_uri, index, &m);
+        fingerprints.push(phase0_fingerprint(&deltas));
+    }
+    let mut replay: Vec<String> = Vec::new();
+    for (index, mutation) in case.mutations.iter().enumerate() {
+        let m = Mutation {
+            kind: mutation.kind.clone(),
+            payload: mutation.payload.clone(),
+        };
+        let deltas = map_phase0_mutation(tool, &case.document_uri, index, &m);
+        replay.push(phase0_fingerprint(&deltas));
+    }
+    if fingerprints != replay {
+        return Err(format!(
+            "{tool} roundtrip fingerprint drift for case {}",
+            case.id
+        ));
+    }
+    Ok(())
+}
+
 pub fn run_corpus(tool: &str) -> Result<(), String> {
     let manifest = load_corpus(tool);
     for case in &manifest.cases {
         match tool {
             "kicad" => run_kicad_case(case)?,
             "freecad" => run_freecad_case(case)?,
+            t if PHASE0_TOOLS.contains(&t) => run_phase0_tool_case(t, case)?,
             other => return Err(format!("unsupported tool corpus: {other}")),
         }
     }
@@ -143,6 +183,30 @@ pub fn corpora_dir() -> PathBuf {
 
 pub fn corpus_manifest_path(tool: &str) -> PathBuf {
     corpora_dir().join(tool).join("manifest.json")
+}
+
+/// Host program names for optional smoke tests (`#[ignore]` unless env gate set).
+pub fn host_program_for_tool(tool: &str) -> Option<&'static str> {
+    match tool {
+        "klayout" => Some("klayout"),
+        "ngspice" => Some("ngspice"),
+        "yosys" => Some("yosys"),
+        "verilator" => Some("verilator"),
+        "magic" => Some("magic"),
+        "openroad" => Some("openroad"),
+        _ => None,
+    }
+}
+
+pub fn run_host_smoke_if_gated(tool: &str) -> Result<(), String> {
+    if !host_tool_gate_enabled(tool) {
+        return Err(format!("skipped: set HB_BRIDGE_HOST_{} to run", tool.to_ascii_uppercase()));
+    }
+    let program = host_program_for_tool(tool).ok_or_else(|| format!("no host binary for {tool}"))?;
+    if !host_binary_available(program) {
+        return Err(format!("host binary not on PATH: {program}"));
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -160,10 +224,88 @@ mod tests {
     }
 
     #[test]
+    fn klayout_corpus_roundtrip_is_deterministic() {
+        run_corpus("klayout").expect("klayout corpus");
+    }
+
+    #[test]
+    fn ngspice_corpus_roundtrip_is_deterministic() {
+        run_corpus("ngspice").expect("ngspice corpus");
+    }
+
+    #[test]
+    fn yosys_corpus_roundtrip_is_deterministic() {
+        run_corpus("yosys").expect("yosys corpus");
+    }
+
+    #[test]
+    fn verilator_corpus_roundtrip_is_deterministic() {
+        run_corpus("verilator").expect("verilator corpus");
+    }
+
+    #[test]
+    fn magic_corpus_roundtrip_is_deterministic() {
+        run_corpus("magic").expect("magic corpus");
+    }
+
+    #[test]
+    fn openroad_corpus_roundtrip_is_deterministic() {
+        run_corpus("openroad").expect("openroad corpus");
+    }
+
+    #[test]
     fn corpus_manifest_files_exist() {
-        for tool in ["kicad", "freecad"] {
+        for tool in ALL_CORPUS_TOOLS {
             let path = corpus_manifest_path(tool);
             assert!(path.is_file(), "missing {}", path.display());
         }
+    }
+
+    #[test]
+    fn fixture_json_exists_for_yosys_and_ngspice() {
+        let root = repo_root();
+        for rel in [
+            "tests/fixtures/yosys/minimal_counter.json",
+            "tests/fixtures/ngspice/rc_lowpass.json",
+        ] {
+            let path = root.join(rel);
+            assert!(path.is_file(), "missing fixture {}", path.display());
+        }
+    }
+
+    #[test]
+    #[ignore = "requires KLayout on PATH; run with HB_BRIDGE_HOST_KLAYOUT=1 and --ignored"]
+    fn klayout_host_binary_smoke() {
+        run_host_smoke_if_gated("klayout").expect("klayout host");
+    }
+
+    #[test]
+    #[ignore = "requires ngspice on PATH; run with HB_BRIDGE_HOST_NGSPICE=1 and --ignored"]
+    fn ngspice_host_binary_smoke() {
+        run_host_smoke_if_gated("ngspice").expect("ngspice host");
+    }
+
+    #[test]
+    #[ignore = "requires Yosys on PATH; run with HB_BRIDGE_HOST_YOSYS=1 and --ignored"]
+    fn yosys_host_binary_smoke() {
+        run_host_smoke_if_gated("yosys").expect("yosys host");
+    }
+
+    #[test]
+    #[ignore = "requires Verilator on PATH; run with HB_BRIDGE_HOST_VERILATOR=1 and --ignored"]
+    fn verilator_host_binary_smoke() {
+        run_host_smoke_if_gated("verilator").expect("verilator host");
+    }
+
+    #[test]
+    #[ignore = "requires Magic on PATH; run with HB_BRIDGE_HOST_MAGIC=1 and --ignored"]
+    fn magic_host_binary_smoke() {
+        run_host_smoke_if_gated("magic").expect("magic host");
+    }
+
+    #[test]
+    #[ignore = "requires OpenROAD on PATH; run with HB_BRIDGE_HOST_OPENROAD=1 and --ignored"]
+    fn openroad_host_binary_smoke() {
+        run_host_smoke_if_gated("openroad").expect("openroad host");
     }
 }

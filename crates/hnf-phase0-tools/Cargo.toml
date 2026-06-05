@@ -1,6 +1,6 @@
 [package]
-name = "roundtrip-harness"
-description = "Headless Phase 0 roundtrip corpus tests (M1/M2 CI gate)"
+name = "hnf-phase0-tools"
+description = "Phase 0 harness-only HNF adapters (KLayout, ngspice, Yosys, Verilator, Magic, OpenROAD)"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -9,10 +9,7 @@ repository.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+hnf-core.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-hnf-core.workspace = true
-hnf-kicad.workspace = true
-hnf-freecad.workspace = true
-hnf-phase0-tools.workspace = true
 sidecar-protocol.workspace = true

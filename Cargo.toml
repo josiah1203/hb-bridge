@@ -1,8 +1,8 @@
 [workspace]
 members = [
-  "crates/protocol",
   "crates/hnf-kicad",
   "crates/hnf-freecad",
+  "crates/hnf-phase0-tools",
   "crates/roundtrip-harness",
 ]
 resolver = "2"
@@ -27,7 +27,9 @@ thiserror = "1"
 hnf-core = { path = "../hnf/crates/hnf-core" }
 hnf-kicad = { path = "crates/hnf-kicad" }
 hnf-freecad = { path = "crates/hnf-freecad" }
-sidecar-protocol = { path = "crates/protocol" }
+hnf-phase0-tools = { path = "crates/hnf-phase0-tools" }
+# Align with hnf workspace to avoid worktree lockfile collision (see hb-platform phase05-gates).
+sidecar-protocol = { path = "../hb-bridge/crates/protocol" }
 
 [profile.dev]
 incremental = true

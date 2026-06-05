@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "verilator-minimal-tb",
+      "document_uri": "hbp://corpora/verilator/minimal/tb.sv",
+      "sidecars": ["verilator"],
+      "mutations": [
+        {"kind": "tb.module.upsert", "payload": {"name": "tb_counter"}},
+        {"kind": "tb.assert.upsert", "payload": {"signal": "clk", "index": 0}}
+      ]
+    }
+  ]
+}

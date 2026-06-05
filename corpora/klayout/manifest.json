@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "klayout-minimal-gds",
+      "document_uri": "hbp://corpora/klayout/minimal/chip.gds",
+      "sidecars": ["klayout"],
+      "mutations": [
+        {"kind": "layout.layer.upsert", "payload": {"layer": 1, "datatype": 0}},
+        {"kind": "layout.shape.upsert", "payload": {"layer": 1, "bbox": [0, 0, 100, 100]}}
+      ]
+    }
+  ]
+}

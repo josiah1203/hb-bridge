@@ -1,0 +1,5 @@
+{
+  "name": "rc-lowpass",
+  "netlist": "corpora/ngspice/minimal/rc_lowpass.cir",
+  "probes": ["out"]
+}

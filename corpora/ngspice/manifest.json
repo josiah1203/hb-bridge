@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "ngspice-rc-lowpass",
+      "document_uri": "hbp://corpora/ngspice/minimal/rc_lowpass.cir",
+      "sidecars": ["ngspice"],
+      "mutations": [
+        {"kind": "sim.netlist.upsert", "payload": {"name": "rc-lowpass", "nodes": 3}},
+        {"kind": "sim.probe.upsert", "payload": {"net": "out", "index": 1}}
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@ cd "$ROOT"
 echo "==> roundtrip-harness (corpus)"
 cargo test -p roundtrip-harness -q
 echo "==> adapter crates"
-cargo test -p hnf-kicad -p hnf-freecad -q
+cargo test -p hnf-kicad -p hnf-freecad -p hnf-phase0-tools -q
 echo "==> sidecar libraries"
 (cd rust && cargo test -p kicad-sidecar -p freecad-sidecar -q)
 echo "ok: headless roundtrip"

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "magic-minimal-cell",
+      "document_uri": "hbp://corpora/magic/minimal/inverter.mag",
+      "sidecars": ["magic"],
+      "mutations": [
+        {"kind": "layout.cell.upsert", "payload": {"name": "inv", "bbox": [0, 0, 10, 5]}},
+        {"kind": "layout.port.upsert", "payload": {"cell": "inv", "port": "A"}}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "openroad-minimal-flow",
+      "document_uri": "hbp://corpora/openroad/minimal/design.def",
+      "sidecars": ["openroad"],
+      "mutations": [
+        {"kind": "pnr.floorplan.upsert", "payload": {"die_area": [0, 0, 1000, 1000]}},
+        {"kind": "pnr.placement.upsert", "payload": {"utilization": 0.55}}
+      ]
+    }
+  ]
+}

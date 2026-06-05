@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "id": "yosys-minimal-counter",
+      "document_uri": "hbp://corpora/yosys/minimal/counter.v",
+      "sidecars": ["yosys"],
+      "mutations": [
+        {"kind": "rtl.module.upsert", "payload": {"top": "counter", "ports": 2}},
+        {"kind": "rtl.cell.upsert", "payload": {"module": "counter", "cell": "reg0"}}
+      ]
+    }
+  ]
+}

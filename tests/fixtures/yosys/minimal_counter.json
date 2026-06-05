@@ -1,0 +1,5 @@
+{
+  "top": "counter",
+  "source": "corpora/yosys/minimal/counter.v",
+  "ports": ["clk", "rst_n", "count"]
+}
