@@ -1,0 +1,12 @@
+{
+  "details": {
+    "cases": [
+      "minimal-kicad-step",
+      "minimal-freecad-step"
+    ],
+    "corpus": "corpora/roundtrip/manifest.json",
+    "tracePath": "out/regression/roundtrip_trace.json"
+  },
+  "ok": true,
+  "suite": "roundtrip"
+}

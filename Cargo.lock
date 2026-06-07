@@ -56,6 +56,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "hnf-phase1-tools"
+version = "0.1.0"
+dependencies = [
+ "hnf-core",
+ "serde",
+ "serde_json",
+ "sidecar-protocol",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -93,6 +103,7 @@ dependencies = [
  "hnf-freecad",
  "hnf-kicad",
  "hnf-phase0-tools",
+ "hnf-phase1-tools",
  "serde",
  "serde_json",
  "sidecar-protocol",

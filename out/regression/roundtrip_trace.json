@@ -1,0 +1,43 @@
+{
+  "cases": [
+    {
+      "id": "minimal-kicad-step",
+      "ok": true,
+      "results": [
+        {
+          "caseId": "minimal-kicad-step",
+          "errors": [],
+          "exportFingerprint": [
+            {
+              "basename": "kicad-export.step",
+              "contentType": "model/step"
+            }
+          ],
+          "ok": true,
+          "sidecar": "kicad"
+        }
+      ]
+    },
+    {
+      "id": "minimal-freecad-step",
+      "ok": true,
+      "results": [
+        {
+          "caseId": "minimal-freecad-step",
+          "errors": [],
+          "exportFingerprint": [
+            {
+              "basename": "freecad-export.step",
+              "contentType": "model/step"
+            }
+          ],
+          "ok": true,
+          "sidecar": "freecad"
+        }
+      ]
+    }
+  ],
+  "corpus": "/Users/josiah/Desktop/hb-bridge/corpora/roundtrip/manifest.json",
+  "ok": true,
+  "suite": "roundtrip"
+}

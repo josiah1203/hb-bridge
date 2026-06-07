@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "librecad-minimal",
+      "document_uri": "hbp://corpora/librecad/minimal",
+      "sidecars": ["librecad"],
+      "mutations": [
+        {"kind": "layout/entity/upsert", "payload": {"layer":"0","entity_type":"line"}}
+      ]
+    }
+  ]
+}

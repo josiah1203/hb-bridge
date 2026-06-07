@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "openstudio-minimal",
+      "document_uri": "hbp://corpora/openstudio/minimal",
+      "sidecars": ["openstudio"],
+      "mutations": [
+        {"kind": "energy/zone/upsert", "payload": {"name":"Zone-A","area_m2":120}}
+      ]
+    }
+  ]
+}

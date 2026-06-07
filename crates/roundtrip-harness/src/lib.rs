@@ -10,6 +10,10 @@ use hnf_phase0_tools::{
     fingerprint_deltas as phase0_fingerprint, host_binary_available, host_tool_gate_enabled,
     map_mutation_to_scene_delta as map_phase0_mutation, PHASE0_TOOLS,
 };
+use hnf_phase1_tools::{
+    fingerprint_deltas as phase1_fingerprint,
+    map_mutation_to_scene_delta as map_phase1_mutation, PHASE1_TOOLS,
+};
 use serde::Deserialize;
 use serde_json::Value;
 use sidecar_protocol::Mutation;
@@ -49,6 +53,16 @@ pub const ALL_CORPUS_TOOLS: &[&str] = &[
     "elmer",
     "qucs-s",
     "platformio",
+    "blenderbim",
+    "freecad_bim",
+    "openstudio",
+    "qgis",
+    "grass",
+    "openscad",
+    "opensees",
+    "code_aster",
+    "calculix",
+    "librecad",
 ];
 
 pub fn repo_root() -> PathBuf {
@@ -210,6 +224,37 @@ pub fn run_phase0_tool_case(tool: &str, case: &CorpusCase) -> Result<(), String>
     Ok(())
 }
 
+pub fn run_phase1_tool_case(tool: &str, case: &CorpusCase) -> Result<(), String> {
+    if !PHASE1_TOOLS.contains(&tool) {
+        return Err(format!("not a Phase 1 stub tool: {tool}"));
+    }
+    let mut fingerprints: Vec<String> = Vec::new();
+    for (index, mutation) in case.mutations.iter().enumerate() {
+        let m = Mutation {
+            kind: mutation.kind.clone(),
+            payload: mutation.payload.clone(),
+        };
+        let deltas = map_phase1_mutation(tool, &case.document_uri, index, &m);
+        fingerprints.push(phase1_fingerprint(&deltas));
+    }
+    let mut replay: Vec<String> = Vec::new();
+    for (index, mutation) in case.mutations.iter().enumerate() {
+        let m = Mutation {
+            kind: mutation.kind.clone(),
+            payload: mutation.payload.clone(),
+        };
+        let deltas = map_phase1_mutation(tool, &case.document_uri, index, &m);
+        replay.push(phase1_fingerprint(&deltas));
+    }
+    if fingerprints != replay {
+        return Err(format!(
+            "{tool} roundtrip fingerprint drift for case {}",
+            case.id
+        ));
+    }
+    Ok(())
+}
+
 pub fn run_corpus(tool: &str) -> Result<(), String> {
     let manifest = load_corpus(tool);
     for case in &manifest.cases {
@@ -217,6 +262,7 @@ pub fn run_corpus(tool: &str) -> Result<(), String> {
             "kicad" => run_kicad_case(case)?,
             "freecad" => run_freecad_case(case)?,
             t if PHASE0_TOOLS.contains(&t) => run_phase0_tool_case(t, case)?,
+            t if PHASE1_TOOLS.contains(&t) => run_phase1_tool_case(t, case)?,
             other => return Err(format!("unsupported tool corpus: {other}")),
         }
     }
@@ -247,6 +293,16 @@ pub fn host_program_for_tool(tool: &str) -> Option<&'static str> {
         "elmer" => Some("ElmerSolver"),
         "qucs-s" => Some("qucs"),
         "platformio" => Some("pio"),
+        "blenderbim" => Some("blender"),
+        "freecad_bim" => Some("freecadcmd"),
+        "openstudio" => Some("openstudio"),
+        "qgis" => Some("qgis"),
+        "grass" => Some("grass"),
+        "openscad" => Some("openscad"),
+        "opensees" => Some("OpenSees"),
+        "code_aster" => Some("as_run"),
+        "calculix" => Some("ccx"),
+        "librecad" => Some("librecad"),
         _ => None,
     }
 }
@@ -342,6 +398,61 @@ mod tests {
     #[test]
     fn platformio_corpus_roundtrip_is_deterministic() {
         run_corpus("platformio").expect("platformio corpus");
+    }
+
+    #[test]
+    fn blenderbim_corpus_roundtrip_is_deterministic() {
+        run_corpus("blenderbim").expect("blenderbim corpus");
+    }
+
+    #[test]
+    fn freecad_bim_corpus_roundtrip_is_deterministic() {
+        run_corpus("freecad_bim").expect("freecad_bim corpus");
+    }
+
+    #[test]
+    fn openstudio_corpus_roundtrip_is_deterministic() {
+        run_corpus("openstudio").expect("openstudio corpus");
+    }
+
+    #[test]
+    fn qgis_corpus_roundtrip_is_deterministic() {
+        run_corpus("qgis").expect("qgis corpus");
+    }
+
+    #[test]
+    fn grass_corpus_roundtrip_is_deterministic() {
+        run_corpus("grass").expect("grass corpus");
+    }
+
+    #[test]
+    fn openscad_corpus_roundtrip_is_deterministic() {
+        run_corpus("openscad").expect("openscad corpus");
+    }
+
+    #[test]
+    fn opensees_corpus_roundtrip_is_deterministic() {
+        run_corpus("opensees").expect("opensees corpus");
+    }
+
+    #[test]
+    fn code_aster_corpus_roundtrip_is_deterministic() {
+        run_corpus("code_aster").expect("code_aster corpus");
+    }
+
+    #[test]
+    fn calculix_corpus_roundtrip_is_deterministic() {
+        run_corpus("calculix").expect("calculix corpus");
+    }
+
+    #[test]
+    fn librecad_corpus_roundtrip_is_deterministic() {
+        run_corpus("librecad").expect("librecad corpus");
+    }
+
+    #[test]
+    fn phase1_tools_count_is_ten() {
+        assert_eq!(PHASE1_TOOLS.len(), 10);
     }
 
     #[test]

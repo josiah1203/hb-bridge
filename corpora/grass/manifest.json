@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "grass-minimal",
+      "document_uri": "hbp://corpora/grass/minimal",
+      "sidecars": ["grass"],
+      "mutations": [
+        {"kind": "geo/raster/upsert", "payload": {"name":"dem","resolution_m":1}}
+      ]
+    }
+  ]
+}

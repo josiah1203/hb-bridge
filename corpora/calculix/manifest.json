@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "calculix-minimal",
+      "document_uri": "hbp://corpora/calculix/minimal",
+      "sidecars": ["calculix"],
+      "mutations": [
+        {"kind": "structural/bc/upsert", "payload": {"type":"fixed","node_set":"base"}}
+      ]
+    }
+  ]
+}

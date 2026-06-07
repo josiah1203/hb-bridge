@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "blenderbim-minimal",
+      "document_uri": "hbp://corpora/blenderbim/minimal",
+      "sidecars": ["blenderbim"],
+      "mutations": [
+        {"kind": "bim/element/upsert", "payload": {"ifc_class":"IfcWall","name":"Wall-1"}}
+      ]
+    }
+  ]
+}

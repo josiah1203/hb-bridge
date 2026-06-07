@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "opensees-minimal",
+      "document_uri": "hbp://corpora/opensees/minimal",
+      "sidecars": ["opensees"],
+      "mutations": [
+        {"kind": "structural/member/upsert", "payload": {"section":"W12x26","length_m":6}}
+      ]
+    }
+  ]
+}

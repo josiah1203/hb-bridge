@@ -98,8 +98,9 @@ def export_mechanical_to_hnf(
     *,
     hnf_version: str = "0.1",
     mutations: list[dict[str, Any]] | None = None,
+    step_content_hash: str | None = None,
 ) -> dict[str, Any]:
-    """Export HNF mechanical domain JSON (v0.1)."""
+    """Export HNF mechanical domain JSON (v0.1) with optional STEP blob ref (ADR-0002)."""
     del hnf_version
     if mutations is None:
         try:
@@ -123,7 +124,19 @@ def export_mechanical_to_hnf(
                 },
             )
         ]
-    return freecad_export_mechanical(project_path, mutations)
+    doc = freecad_export_mechanical(project_path, mutations)
+    if step_content_hash and isinstance(doc.get("objects"), list):
+        for obj in doc["objects"]:
+            props = obj.get("properties", {})
+            if props.get("domain") == "mechanical":
+                solids = props.get("solids", [])
+                if solids:
+                    solids[0].setdefault("geometry_blobs", []).append(
+                        {"format": "step", "content_hash": step_content_hash}
+                    )
+                props.setdefault("content_hash", step_content_hash)
+                obj["properties"] = props
+    return doc
 
 
 def import_mechanical_from_hnf(

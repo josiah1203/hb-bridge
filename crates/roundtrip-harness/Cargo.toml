@@ -15,4 +15,5 @@ hnf-core.workspace = true
 hnf-kicad.workspace = true
 hnf-freecad.workspace = true
 hnf-phase0-tools.workspace = true
+hnf-phase1-tools.workspace = true
 sidecar-protocol.workspace = true

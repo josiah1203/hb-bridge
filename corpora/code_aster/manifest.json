@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "code_aster-minimal",
+      "document_uri": "hbp://corpora/code_aster/minimal",
+      "sidecars": ["code_aster"],
+      "mutations": [
+        {"kind": "structural/load/upsert", "payload": {"type":"dead","value_kn":10}}
+      ]
+    }
+  ]
+}

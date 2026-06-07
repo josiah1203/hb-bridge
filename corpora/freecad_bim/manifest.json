@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "freecad_bim-minimal",
+      "document_uri": "hbp://corpora/freecad_bim/minimal",
+      "sidecars": ["freecad_bim"],
+      "mutations": [
+        {"kind": "bim/storey/upsert", "payload": {"name":"Level-1","elevation_m":0}}
+      ]
+    }
+  ]
+}

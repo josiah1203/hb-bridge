@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "qgis-minimal",
+      "document_uri": "hbp://corpora/qgis/minimal",
+      "sidecars": ["qgis"],
+      "mutations": [
+        {"kind": "geo/layer/upsert", "payload": {"name":"site","crs":"EPSG:4326"}}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+[package]
+name = "hnf-phase1-tools"
+description = "Harness-only mutation mapping for Phase 1 built-environment tools"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+hnf-core = { workspace = true }
+sidecar-protocol = { workspace = true }

@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {
+      "id": "openscad-minimal",
+      "document_uri": "hbp://corpora/openscad/minimal",
+      "sidecars": ["openscad"],
+      "mutations": [
+        {"kind": "mechanical/solid/upsert", "payload": {"name":"bracket","volume_mm3":50}}
+      ]
+    }
+  ]
+}

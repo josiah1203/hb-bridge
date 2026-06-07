@@ -4,7 +4,10 @@ use hnf_core::{
     parse_mechanical, serialize_mechanical, validate, HnfDocument, HnfManifest, HnfMutation,
     HnfObject, HNF_VERSION_V0_1, MECHANICAL_DOMAIN, MECHANICAL_VERSION,
 };
-use hnf_core::{MechanicalConstraint, MechanicalDomain, MechanicalProperties, MechanicalSolid};
+use hnf_core::{
+    MechanicalConstraint, MechanicalDomain, MechanicalGeometryBlob, MechanicalProperties,
+    MechanicalSolid,
+};
 use hnf_core::domain::HNF_TYPE_OBJECT;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -40,6 +43,8 @@ pub struct MechanicalSolidSnapshot {
     pub material: String,
     #[serde(default)]
     pub volume_mm3: f64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub step_content_hash: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -64,15 +69,29 @@ pub fn mechanical_domain_from_snapshot(
     let solids: Vec<MechanicalSolid> = snapshot
         .solids
         .iter()
-        .map(|s| MechanicalSolid {
-            id: s.solid_id.clone(),
-            name: s.name.clone(),
-            material: if s.material.is_empty() {
-                None
-            } else {
-                Some(s.material.clone())
-            },
-            volume_mm3: Some(s.volume_mm3),
+        .map(|s| {
+            let geometry_blobs = s
+                .step_content_hash
+                .as_ref()
+                .filter(|h| h.len() == 64)
+                .map(|h| {
+                    vec![MechanicalGeometryBlob {
+                        format: "step".into(),
+                        content_hash: h.clone(),
+                    }]
+                })
+                .unwrap_or_default();
+            MechanicalSolid {
+                id: s.solid_id.clone(),
+                name: s.name.clone(),
+                material: if s.material.is_empty() {
+                    None
+                } else {
+                    Some(s.material.clone())
+                },
+                volume_mm3: Some(s.volume_mm3),
+                geometry_blobs,
+            }
         })
         .collect();
 
@@ -97,6 +116,7 @@ pub fn mechanical_domain_from_snapshot(
         properties: MechanicalProperties {
             solids,
             constraints,
+            ..Default::default()
         },
     };
 
@@ -115,6 +135,11 @@ pub fn mechanical_snapshot_from_domain(domain: &MechanicalDomain) -> MechanicalS
                 name: s.name.clone(),
                 material: s.material.clone().unwrap_or_default(),
                 volume_mm3: s.volume_mm3.unwrap_or(0.0),
+                step_content_hash: s
+                    .geometry_blobs
+                    .iter()
+                    .find(|b| b.format == "step")
+                    .map(|b| b.content_hash.clone()),
             })
             .collect(),
         constraints: domain
@@ -250,6 +275,11 @@ pub fn mutations_to_mechanical_snapshot(
                         .get("volume_mm3")
                         .and_then(|v| v.as_f64())
                         .unwrap_or(0.0),
+                    step_content_hash: m
+                        .payload
+                        .get("step_content_hash")
+                        .and_then(|v| v.as_str())
+                        .map(str::to_string),
                 });
             }
             "mechanical/constraint/upsert" => {
@@ -300,6 +330,7 @@ pub fn mechanical_snapshot_to_mutations(snapshot: &MechanicalSnapshot) -> Vec<Hn
                 "name": solid.name,
                 "material": solid.material,
                 "volume_mm3": solid.volume_mm3,
+                "step_content_hash": solid.step_content_hash,
             }),
         });
     }
@@ -366,6 +397,9 @@ mod tests {
                 name: "Mounting Bracket".into(),
                 material: "Aluminum".into(),
                 volume_mm3: 128.5,
+                step_content_hash: Some(
+                    "a".repeat(64),
+                ),
             }],
             constraints: vec![MechanicalConstraintSnapshot {
                 constraint_id: "c-fix-1".into(),
